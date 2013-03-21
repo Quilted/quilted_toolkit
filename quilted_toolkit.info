@@ -1,0 +1,7 @@
+name = "Quilted Toolkit"
+description = "Random assortment of helful code"
+package = "Other"
+core = 7.x
+dependencies[] = pathauto
+
+files[] = quilted_toolkit.module

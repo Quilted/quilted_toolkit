@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file
+ * Various helpful code snippets.
+ */
+
+/**
+ * Implements hook_action_info().
+ */
+function quilted_toolkit_action_info() {
+  $info['quilted_toolkit_pathauto_node_delete_action'] = array(
+    'type' => 'node',
+    'label' => t('Delete node alias'),
+    'configurable' => FALSE,
+  );
+
+  $info['quilted_toolkit_menu_node_delete_action'] = array(
+    'type' => 'node',
+    'label' => t('Delete menu links'),
+    'configurable' => FALSE,
+  );
+
+  return $info;
+}
+
+/**
+ * Create an action for pathauto_node_delete().
+ */
+function quilted_toolkit_pathauto_node_delete_action($node, $context = array()) {
+  module_load_include('module', 'pathauto');
+  pathauto_node_delete($node);
+}
+
+/**
+ * Create an action for menu_node_delete().
+ */
+function quilted_toolkit_menu_node_delete_action($node, $context = array()) {
+  menu_node_delete($node);
+}
