@@ -37,3 +37,42 @@ function quilted_toolkit_pathauto_node_delete_action($node, $context = array()) 
 function quilted_toolkit_menu_node_delete_action($node, $context = array()) {
   menu_node_delete($node);
 }
+
+/**
+ * Implements hook_context_registry().
+ */
+function quilted_toolkit_context_registry() {
+  $registry = array();
+  $registry['reactions'] = array();
+  $registry['reactions']['breadcrumb_allow_hidden'] = array(
+    'title' => t('Breadcrumb (Allow hidden menus)'),
+    'description' => t('Set the breadcrumb trail to the selected menu item.'),
+    'plugin' => 'quilted_toolkit_context_reaction_breadcrumb_allow_hidden',
+  );
+  return $registry;
+}
+
+/**
+ * Implements hook_context_plugins().
+ */
+function quilted_toolkit_context_plugins() {
+  $plugins = array();
+  $plugins['quilted_toolkit_context_reaction_breadcrumb_allow_hidden'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'quilted_toolkit') . '/plugins',
+      'file' => 'quilted_toolkit_context_reaction_breadcrumb_allow_hidden.inc',
+      'class' => 'quilted_toolkit_context_reaction_breadcrumb_allow_hidden',
+      'parent' => 'context_reaction_menu',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Implementation of hook_page_delivery_callback_alter().
+ */
+function quilted_toolkit_page_delivery_callback_alter() {
+  if ($plugin = context_get_plugin('reaction', 'breadcrumb_allow_hidden')) {
+    $plugin->execute();
+  }
+}
