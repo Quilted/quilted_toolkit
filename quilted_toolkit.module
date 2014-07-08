@@ -76,3 +76,28 @@ function quilted_toolkit_page_delivery_callback_alter() {
     $plugin->execute();
   }
 }
+
+/**
+ * Helper function to find nodes by type and title.
+ *
+ * @return nid
+ */
+function quilted_toolkit_get_nid_by_title($title, $type = NULL) {
+  $query = db_select('node', 'n');
+  $query->condition('n.title', $title);
+
+  if (!is_null($type)) {
+    $query->condition('n.type', $type);
+  }
+
+  $query->condition('n.status', 1);
+  $query->fields('n', array('nid'));
+  $query_result = $query->execute();
+  $nid = NULL;
+
+  foreach ($query_result as $record) {
+    $nid = $record->nid;
+  }
+
+  return $nid;
+}
